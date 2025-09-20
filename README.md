@@ -11,6 +11,7 @@ Because of its heritage, it is mostly compatible with older Commodore source cod
 This source is based on version "V1.0", dated 1989-08-23, reconstructed from the V1.0 .lis/.lst files in [c65_src.tar.gz](http://www.zimmers.net/anonftp/pub/cbm/src/c65/c65_src.tar.gz) and the B0.0 .c/.h files in 4502-asm-for-pc.img from Steve Gray's [Dennis Jarvis Page](http://cbmsteve.ca/dj/).
 
 It has been slightly updated:
+
 * CMakeLists.txt has been added for compiling on other platforms
 * The whole source has been modified into a valid form which has passed all checks from VS2022
 * A UNIX-style Makefile has been added.
@@ -20,7 +21,6 @@ It has been slightly updated:
 * The behavior has been changed to default to lower case extensions.
 * `.IF` has been added for BSO compatibility.
 * The macro-within-include bug has been fixed (see [serlib.zip](http://www.zimmers.net/anonftp/pub/cbm/src/drives/serlib.zip) for an example run before the fix).
-
 
 ## Table of Contents
 
@@ -51,25 +51,24 @@ The default file extentions are `.obj`, `.lst`, and `.src`, respectively.
 
 Switches  (either upper or lower case):
 
-		/A     absolute assembly (default)
-		/Cn    cpu instruction set:
-				   /C0 for NMOS 6502
-				   /C1 for CMOS 6502
-				   /C2 for CMOS 6502 w/bit instructions
-				   /C3 for Commodore 4502 (default)
-		/Dpath specify path for intermediate file (usually RAM disk on PCs).
-		/H     help - prints this message
-		/L     assume long branches on pass1. (default= assume short branches)
-		/Mnnn  maximum macro nesting depth (default=50, limits=2-999).
-		/Pnn   maximum number of passes to try (default=15, limits=2-99).
-		/N     don't print errors to console during assembly
-		/R     relocatable assembly
-			   (illegal since this is an absolute assembler only)
-		/S     narrow list format
-		/T     don't print symbol table
-		/V     don't print cross reference
-		/X     print cross reference (default)
-
+  /A     absolute assembly (default)
+  /Cn    cpu instruction set:
+       /C0 for NMOS 6502
+       /C1 for CMOS 6502
+       /C2 for CMOS 6502 w/bit instructions
+       /C3 for Commodore 4502 (default)
+  /Dpath specify path for intermediate file (usually RAM disk on PCs).
+  /H     help - prints this message
+  /L     assume long branches on pass1. (default= assume short branches)
+  /Mnnn  maximum macro nesting depth (default=50, limits=2-999).
+  /Pnn   maximum number of passes to try (default=15, limits=2-99).
+  /N     don't print errors to console during assembly
+  /R     relocatable assembly
+      (illegal since this is an absolute assembler only)
+  /S     narrow list format
+  /T     don't print symbol table
+  /V     don't print cross reference
+  /X     print cross reference (default)
 
 Since the defaults are reasonable, a typical invokation of the assembler would be
 
@@ -77,11 +76,9 @@ Since the defaults are reasonable, a typical invokation of the assembler would b
 
 This will assemble `name.src` and output to disk `name.obj` and `name.lst`.
 
-
 ## Case Sensitivity
 
 The assembler is case insensitive for all non-quoted strings. This includes symbol names, label names, macro names, opcodes, and directives. The list file shows the source statements in the case they are presented to the assembler in. The symbol table and cross references list all symbols in the same case. Subtitles, program names, and other uniquely textual items are not case sensitive. However, on systems with case sensitive filesystems, `.INCLUDE` filenames must be specified in the correct case.
-
 
 ## Constants
 
@@ -107,7 +104,6 @@ Binary constants are represented by a binary number preceded by the "%” symbol
 
 Literal constants are represented by one or two ASCII or PETSCII characters enclosed in matching single quote characters. In certain situations, only the first single quote is neccesary. Certain differences exist in the way the `.BYTE` directive handles quoted strings. See that directive’s explanation. In the case where two literal characters are enclosed in quotes, the assembler places the first character in the low order field in the resulting 16-bit value.
 
-
 ## Input File Format
 
 There are four fields recognized by the assembler. Each is optional and they typically are delimited by spaces or tabs.
@@ -123,7 +119,6 @@ The text in the second field defines how the assembler will interpret that line.
 The third field generally contains arguments to the second field. In cases where the operation does not expect arguments, the third field is considered to be a comment field.
 
 Anything after the third field is considered to be a comment.
-
 
 ## Symbols and Labels
 
@@ -165,7 +160,6 @@ Examples of local labels:
        1$      ; this is the same as the previous
        999$    ; this is illegal (1-255).
 
-
 The range over which a local label is defined is delimited by two things:
 
 1) global labels
@@ -184,12 +178,11 @@ Example:
                jmp 30$  ; not ok, the .local directive limits
                         ; the range of the 30$
 
-
 ## Assigning Values to Symbols
 
 Symbols may given a value in two ways.
 
-### Appearance in the labei field.
+### Appearance in the labei field
 
 A symbol which appears in the label field becomes a label except in 2 cases:
 
@@ -201,7 +194,6 @@ A symbol which appears in the label field becomes a label except in 2 cases:
 A symbol may be assigned a value using the equal sign. For example:
 
        nine = $09 ; assign the hex value 9 to the symbol ”nine”
-
 
 ## Expressions
 
@@ -237,7 +229,6 @@ For Example:
        -1       = $FFFF
        >-1      = $00FF
        !N$000F  = $FFF0
-
 
 ## Macros
 
@@ -386,7 +377,6 @@ Expansion:
 
 Many conditionals are supplied expressly for using inside of macros to allow detection of null fields, undefined symbols, etc. Other directives (`.REPT`, `.IRPC`, `.IRP`) are actually special cases of macros and work using many `.MACRO` like principles.
 
-
 ## Listing Format
 
 The listing output has many features. The listing is paginated with several lines of information at the top of each page. Here is an example of a portion of a single page. Note that this page shows a call to the macro `LD_CHRS` used as an example in the previous sections describing macros.
@@ -416,26 +406,25 @@ The second line contains two things:
 
 The third line contains headers for the columns output by the assembler. Source code listing lines have several fields.
 
-### Error field:
+### Error field
 
 The error field is the first one on the line. It is placed there so that lines with error may be easily found. In general, assembly errors are indicated by a single letter in the error field on the line the error occurred on. If a line exhibits multiple errors, then several letters will appear there. One such error is shown in the sample listing indicating that a "VALUE" error occurred. This is because that line is attempting to load the eight-bit accumulator with a sixteen-bit value.
 
-### Address field:
+### Address field
 
 The address field generally indicates the address of any object code bytes which are listed on that line.
 
-### Object field:
+### Object field
 
 The object field generally indicates any object code bytes which were generated by the current line. It may also contain a 16-bit value preceded by an equal sign. This indicates the value of some expression which was evaluated on the line (for use in conditional directives, or which a symbol is equated to).
 
-### Sequence field:
+### Sequence field
 
 The sequence field indicates the line number of the current source line. If a macro is called on this line, the sequence field is followed by a `+` sign. If the line was generated by a macro, then the sequence field is followed by a single letter from `A`-`Z`. This letter indicates the depth of macro expansion generating the current line.
 
-### Source Statement Field:
+### Source Statement Field
 
 The source statement field contains the verbatim source code for the current line. No beatification is performed. Tabs are displayed normally because the sequence field starts on a tab stop.
-
 
 ## Assembler Directives
 
@@ -490,7 +479,6 @@ Be careful not to create circular linkages with this directive. This will result
 #### `.END`
 
 The `.END` directive terminates the assembly process and forces the assembler to ignore all further source lines.
-
 
 ### Core Generation Directives
 
@@ -629,6 +617,7 @@ This directive sets the default radix for all constants without a leading radix 
 The `.AORG` directive is a synonym to `*=`. It sets the program counter to the specified argument
 
 #### `.SECT` *name* [`,ABS,LOC=` *symbol*]
+
 #### `.ASECT` *name* [`,LOC=` *symbol*]
 
 The `.SECT` and `.ASECT` directives either declare or switch to a section. You can declare a section like this:
@@ -646,7 +635,6 @@ The value of the current section will be updated with the current program counte
 The default section `A` exists for every program.
 
 *These directives do not seem to work right.*
-
 
 ## Error Reporting
 
@@ -685,12 +673,10 @@ Assembly errors occur for a variety of reasons. Each one has a specific error co
 * `?`: Internal error checking has conflicting results. This error occurs when the assembler detects an error which by design, should notoccur. This is indicative of a bug; however chances are that some construct on the line is questionable. This error can usually be eliminated by rearranging the line.
 * `*`: Too many error codes were generated for this line for the assembler to list them all.
 
-
 ## TODO
 
 * Fix LLVM/GCC warnings
 * Handle UNIX path separators correctly
-
 
 ## Authors
 
