@@ -23,7 +23,7 @@ void parselin() {
 	s2 = p2;
 	s3 = p3; /* pointers to fields */
 
-	j = strlen(line) - 1; /* remove trailing spaces */
+	j = (int)strlen(line) - 1; /* remove trailing spaces */
 	if (j < 0) return;
 	while (isspace(line[j]) && j) line[j--] = 0;
 	if (j < 0) return;
@@ -103,10 +103,12 @@ void parses3(int enablang) {
 }
 
 void macsubst(char *parm, char *arg, char *subbed) { /* substitute macro args for parms */
-	int angleb, dif, i, j, k, la, lp, ll;
-	la = strlen(arg);
-	lp = strlen(parm);
-	ll = strlen(line);
+	int angleb, dif, i, j, k;
+	
+	int la, lp, ll;
+	la = (int)strlen(arg);
+	lp = (int)strlen(parm);
+	ll = (int)strlen(line);
 	angleb = (arg[0] == '<') && (arg[la - 1] == '>'); /* is arg in <> ? */
 	for (i = 0; i <= ll - lp; i++) {
 		if (strncmp(&line[i], parm, lp)) /* search for parms */
@@ -117,7 +119,7 @@ void macsubst(char *parm, char *arg, char *subbed) { /* substitute macro args fo
 		dif = la - lp;              /* length diff of parm and arg */
 		dif -= 2 * angleb;          /* 2 less if angle brackets */
 		if (dif > 0)
-			for (j = strlen(line) + dif + 1; j > i;
+			for (j = (int)strlen(line) + dif + 1; j > i;
 			     j--) { /* arg is longer than parm */
 				line[j] = line[j - dif]; /* shift line */
 				subbed[j] =
@@ -135,7 +137,8 @@ void macsubst(char *parm, char *arg, char *subbed) { /* substitute macro args fo
 		     i++, j++) {           /* subst arg for parm */
 			subbed[i] = 1;     /* substitution made */
 			line[i] = arg[j];  /* insert arg */
-			ll = strlen(line); /* line length may have changed */
+			ll = (int)strlen(
+			        line); /* line length may have changed */
 		}
 		i--; /* will be incremented by for */
 	}

@@ -11,6 +11,8 @@ Because of its heritage, it is mostly compatible with older Commodore source cod
 This source is based on version "V1.0", dated 1989-08-23, reconstructed from the V1.0 .lis/.lst files in [c65_src.tar.gz](http://www.zimmers.net/anonftp/pub/cbm/src/c65/c65_src.tar.gz) and the B0.0 .c/.h files in 4502-asm-for-pc.img from Steve Gray's [Dennis Jarvis Page](http://cbmsteve.ca/dj/).
 
 It has been slightly updated:
+* CMakeLists.txt has been added for compiling on other platforms
+* The whole source has been modified into a valid form which has passed all checks from VS2022
 * A UNIX-style Makefile has been added.
 * The whole source has been linted into a more modern coding style.
 * The syntax has been updated from K&R to ISO C.

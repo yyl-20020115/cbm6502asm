@@ -316,16 +316,20 @@ int dir2dot() {
 		return 1;
 	}
 	if (!strcmp(s2, ".SPACE") || !strcmp(s2, ".SKIP")) {
-		if ((j = evaluate(s3, &l) && !error))
-			sprintf(line, "%ld\0%c", l, spechar = 's');
+		if ((j = evaluate(s3, &l) && !error)) {
+			//sprintf(line, "%ld\0%c", l, spechar = 's');
+			sprintf(line, "%ld%c", l, spechar = 's');
+		}
 		else
 			display_error(error = 'E');
 		return 1;
 	}
 	if (!strcmp(s2, ".FORMLN") || !strcmp(s2, ".FORML") ||
 	    !strcmp(s2, ".FORM")) {
-		if ((j = evaluate(s3, &l)))
-			sprintf(line, "%ld\0%c", l, spechar = 'f');
+		if ((j = evaluate(s3, &l))) {
+			//sprintf(line, "%ld\0%c", l, spechar = 'f');
+			sprintf(line, "%ld%c", l, spechar = 'f');
+		}
 		else
 			display_error(error = 'E');
 		return 1;
@@ -347,7 +351,7 @@ int dir2dot() {
 		if (pass == 2) {
 			if ((s1 = strchr(s3, ';'))) /* trim comment */
 				*s1 = 0;
-			for (i = strlen(s3); i > 0; i--)
+			for (i = (int)strlen(s3); i > 0; i--)
 				if (isspace(s3[i])) /* trim trailing white space
 				                     */
 					s3[i] = 0;

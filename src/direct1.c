@@ -17,7 +17,7 @@ int pushcond(int cond) {
 }
 
 int direct1(char *macprmbgn, char **maclinptr, char *macargbgn) {
-	int i, j;
+	int i,j;
 	long l;
 
 	print = clist;
@@ -60,7 +60,7 @@ int direct1(char *macprmbgn, char **maclinptr, char *macargbgn) {
 		if (!condit) /* not interest in type if condit is false */
 			return (pushcond(condit));
 		if (!strcmp(s2, ".IFB")) {
-			i = strlen(s3) - 1;
+			i = (int)strlen(s3) - 1;
 			if (*s3 != '<' || s3[i] != '>' || i < 1) {
 				display_error(error = 'F');
 				return 1;
@@ -68,7 +68,7 @@ int direct1(char *macprmbgn, char **maclinptr, char *macargbgn) {
 			return (pushcond(i == 1));
 		}
 		if (!strcmp(s2, ".IFNB")) {
-			i = strlen(s3) - 1;
+			i = (int)strlen(s3) - 1;
 			if (*s3 != '<' || s3[i] != '>' || i < 1) {
 				display_error(error = 'F');
 				return 1;
@@ -80,8 +80,8 @@ int direct1(char *macprmbgn, char **maclinptr, char *macargbgn) {
 			while (*s3) s3++;
 			s3++;
 			if (!strcmp(s2, ".IFIDN")) {
-				j = strlen(p3) - 1;
-				i = strlen(s3) - 1;
+				j = (int)strlen(p3) - 1;
+				i = (int)strlen(s3) - 1;
 				if (*s3 != '<' || s3[i] != '>' || i < 1 ||
 				    *p3 != '<' || p3[j] != '>' || j < 1) {
 					display_error(error = 'F');
@@ -90,8 +90,8 @@ int direct1(char *macprmbgn, char **maclinptr, char *macargbgn) {
 				return (pushcond(!strcmp(s3, p3)));
 			}
 			if (!strcmp(s2, ".IFNIDN")) {
-				j = strlen(p3) - 1;
-				i = strlen(s3) - 1;
+				j = (int)strlen(p3) - 1;
+				i = (int)strlen(s3) - 1;
 				if (*s3 != '<' || s3[i] != '>' || i < 1 ||
 				    *p3 != '<' || p3[j] != '>' || j < 1) {
 					display_error(error = 'F');
@@ -104,8 +104,9 @@ int direct1(char *macprmbgn, char **maclinptr, char *macargbgn) {
 			equ = TRUE;
 			d[data++] = (l >> 8) & 255;
 			d[data++] = l & 255;
-			if (!i && !strcmp(&p2[strlen(s2) - 3], "DEF"))
-				for (error = j = 0; j < 5; j++) {
+			if (!i && !strcmp(&p2[strlen(s2) - 3], "DEF")) {
+				error = 0;
+				for (j = 0; j < 5; j++) {
 					if (error_field[j] ==
 					    'U') /* no undefined error if */
 						error_field[j] =
@@ -113,8 +114,9 @@ int direct1(char *macprmbgn, char **maclinptr, char *macargbgn) {
 						                defined */
 					error |= !isspace(error_field[j]);
 				}
-			if (!strcmp(s2, ".IFDEF")) return (pushcond(i));
-			if (!strcmp(s2, ".IFNDEF")) return (pushcond(!i));
+			}
+			if (!strcmp(s2, ".IFDEF")) return (pushcond((int)i));
+			if (!strcmp(s2, ".IFNDEF")) return (pushcond((int)!i));
 			if (i) {
 				if (!strcmp(s2, ".IFE"))
 					return (pushcond(l == 0));
@@ -293,9 +295,9 @@ int direct1(char *macprmbgn, char **maclinptr, char *macargbgn) {
 		incl_stack[--incl_sp] = file_src;
 		filnamptr[incl_sp] = fnptr;
 		strcpy(&filename[fnptr], srcfile);
-		fnptr += strlen(srcfile) + 1;
+		fnptr += (int)strlen(srcfile) + 1;
 		appendef(s3, ".src");
-		for (i = strlen(s3) - 1; i > 0; i--)
+		for (i = (int)strlen(s3) - 1; i > 0; i--)
 			if (s3[i] == '\\' || s3[i] == ']' ||
 			    s3[i] == ':') /* explicit path? */
 				break;    /* yes */

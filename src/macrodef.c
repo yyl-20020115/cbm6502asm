@@ -69,7 +69,7 @@ void macro_def(char *macprmbgn, char **maclinptr, char *macargbgn, int mactype) 
 			/* truncated memory block */
 			tmpmac =
 			        (struct macdef *)realloc((char *)newmac, m + 8);
-			if (!(long)(macro_head = tmpmac))
+			if (0==(macro_head = tmpmac))
 				error_msg("Available memory exceeded",
 				          newmac->name, 4);
 			return; /* finished */
@@ -79,14 +79,14 @@ void macro_def(char *macprmbgn, char **maclinptr, char *macargbgn, int mactype) 
 		if (m + 8 + LINELENG > l) { /* alloc more memory if needed */
 			tmpmac = (struct macdef *)realloc((char *)newmac,
 			                                  l += CHUNK);
-			if (!(long)tmpmac) /* check if allocation sucessful */
+			if (0==tmpmac) /* check if allocation sucessful */
 				error_msg("Available memory exceeded",
 				          newmac->name, 4);
 			newmac = tmpmac; /* allocation was successful */
 		}
 		if (strlen(line)) {
 			strcpy(&newmac->name[m], line); /* copy the line */
-			m += 1 + strlen(line); /* add length of line and null */
+			m += 1 + (int)strlen(line); /* add length of line and null */
 		} else {
 			newmac->name[m++] = ' '; /* blank line */
 			newmac->name[m++] = 0;

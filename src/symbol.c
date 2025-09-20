@@ -170,7 +170,7 @@ void insert_symbol(char *sym, long value, int def, int known, int local) {
 
 	/* create a new symbol table entry */
 
-	k = strlen(sym);
+	k = (int)strlen(sym);
 	if (k > 31) k = 31;
 	ptr = (struct smbl *)allocsym(k);
 	for (i = 0; (i < k) && (ptr->name[i] = sym[i]); i++)

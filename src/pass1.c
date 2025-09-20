@@ -7,7 +7,7 @@ int good_symbol(char *p) {
 	if (isalpha(*p) || *p == '.' || *p == '_') /* global symbol */
 		for (; i < 32 && p[i]; i++)
 			if (!isalpha(p[i]) && !isdigit(p[i]) && p[i] != '.' &&
-			    p[i] != '_' & p[i] != '$') {
+			    p[i] != '_' && p[i] != '$') {
 				display_error(error = 'C');
 				return (0);
 			}

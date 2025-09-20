@@ -163,8 +163,7 @@ void opcode() {
 int searchstr(char *str, char *key, int size) {
 	int i, j, k;
 	for (i = j = 0; str[i]; i += size, j++) {
-		for (k = 0; k < size && str[i + k] == key[k]; k++)
-			;
+		for (k = 0; k < size && str[i + k] == key[k]; k++);
 		if (k == size) return (j);
 	}
 	return (-1);
@@ -231,14 +230,15 @@ char parseopr() {
 		j = searchstr(nm7, s2, 3);
 		if (j >= 0) {
 			d[data++] = l & 255;
-			if ((op7[j] & 0x00ff) == 0x00f4) d[data++] = l >> 8;
+			if ((op7[j] & 0x00ff) == 0x00f4)
+				d[data++] = (char)(l >> 8);
 			if (!known || l < 256 || (op7[j] & 0x00ff) == 0x00f4)
 				return (op7[j]);
 		}
 		display_error(error = 'O');
 		return (data = 0);
 	}
-	s3l = strlen(s3);
+	s3l = (int)strlen(s3);
 
 	if (toupper(s3[s3l - 5]) == 'S' &&
 	    s3[s3l - 6] == ',' && /* SP indirect,Y */
@@ -260,7 +260,7 @@ char parseopr() {
 		known = evaluate(s3, &s);
 		s -= loc_cntr + 2;
 		d[data++] = s & 255;
-		d[data++] = s >> 8;
+		d[data++] = (char)(s >> 8);
 		return (oph[0]);
 	}
 	if (!strcmp(s2, "JMP")) { /* jmp - 3 flavors */
@@ -269,7 +269,7 @@ char parseopr() {
 		if (s3[0] == '(' && s3[s3l - 1] == ')') {
 			strcpy(tmp, &s3[1]);
 			if ((i = (s3[s3l - 3] == ',' &&
-			         toupper(s3[s3l - 2]) == 'X')))
+			          toupper(s3[s3l - 2]) == 'X')))
 				tmp[s3l - 4] = 0;
 			else
 				tmp[s3l - 2] = 0;
@@ -277,7 +277,7 @@ char parseopr() {
 		}
 		known = evaluate(tmp, &l);
 		d[data++] = l & 255;
-		d[data++] = l >> 8;
+		d[data++] = (char)(l >> 8);
 		return (oph[i]);
 	}
 	if (!strcmp(s2, "JSR")) { /* call - 3 flavors */
@@ -286,7 +286,7 @@ char parseopr() {
 		if (s3[0] == '(' && s3[s3l - 1] == ')') {
 			strcpy(tmp, &s3[1]);
 			if ((i = (s3[s3l - 3] == ',' &&
-			         toupper(s3[s3l - 2]) == 'X')))
+			          toupper(s3[s3l - 2]) == 'X')))
 				tmp[s3l - 4] = 0;
 			else
 				tmp[s3l - 2] = 0;
@@ -294,7 +294,7 @@ char parseopr() {
 		}
 		known = evaluate(tmp, &l);
 		d[data++] = l & 255;
-		d[data++] = l >> 8;
+		d[data++] = (char)(l >> 8);
 		return (oph[i]);
 	}
 	/*      indirect X */
@@ -315,7 +315,7 @@ char parseopr() {
 		strcpy(tmp, &s3[1]);
 		tmp[s3l - 4] = 0;
 		known = evaluate(tmp, &l);
-		d[data++] = l;
+		d[data++] = (char)l;
 		if (!known || l < 256)
 			if ((j = searchstr(nma, s2, 3)) >= 0) return (opa[j]);
 		display_error(error = 'O');
@@ -347,7 +347,7 @@ char parseopr() {
 		d[data++] = l & 255;
 		if (known && l > -129 && l < 256 && !forcelong)
 			if ((j = searchstr(nmc, s2, 3)) >= 0) return (opc[j]);
-		d[data++] = l >> 8;
+		d[data++] = (char)(l >> 8);
 		if ((j = searchstr(nmb, s2, 3)) >= 0) return (opb[j]);
 		display_error(error = 'O');
 		return (data = 0);
@@ -360,7 +360,7 @@ char parseopr() {
 		known = evaluate(tmp, &l);
 		d[data++] = l & 255;
 		if (!known || l > 255 || forcelong) {
-			d[data++] = l >> 8;
+			d[data++] = (char)(l >> 8);
 			if ((j = searchstr(nm8, s2, 3)) >= 0)
 				if (op9[j]) return (op9[j]); /* abs,x */
 		}
@@ -423,18 +423,18 @@ char parseopr() {
 			}
 			if ((assumeL && !known) ||
 			    (known && !petite)) { /* long */
-				d[data++] = s >> 8;
+				d[data++] = (char)(s >> 8);
 				return (ope[j]); /* long */
 			}
 			return opd[j]; /* else short */
 		} else /* last pass, can't change operand size */
-		        if (forcelong) { /* long branch */
-			d[data++] = s >> 8;
-			return (ope[j]);
-		} else { /* short branch */
-			if (!petite) display_error(error = 'A');
-			return (opd[j]);
-		}
+			if (forcelong) { /* long branch */
+				d[data++] = (char)(s >> 8);
+				return (ope[j]);
+			} else { /* short branch */
+				if (!petite) display_error(error = 'A');
+				return (opd[j]);
+			}
 	}
 	/*
 	        must be absolute or bp

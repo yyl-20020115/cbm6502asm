@@ -8,14 +8,16 @@ unsigned _STACK = 8192; /* stack size for lattice compiler */
 
 int main(int argc, char *argv[]) {
 	long oldbytes;
-	int i, first = TRUE;
+	int i;
+	
+	int first = TRUE;
 	open_files(argc, argv); /* get command line */
 	while (*src) {          /* as long as there are more src files */
 		for (i = 0; (srcfile[i] = toupper(src[i])); i++)
 			;
 		appendef(srcfile, ".src");
 		fprintf(file_tmp, "%sF%s\n", STATLINE, srcfile);
-		for (i = strlen(srcfile); i > 0;
+		for (i = (int)strlen(srcfile); i > 0;
 		     i--) /* extract path, if any for tmp file */
 			if (srcfile[i] == '\\' || srcfile[i] == ']' ||
 			    srcfile[i] == ':') {
@@ -109,7 +111,7 @@ void open_files(int argc, char *argv[]) { /* open files and initialize things */
 		        *p++; /* get obj file name from command line */
 	objfile[emitobj] = 0; /* terminate obj file name */
 	appendef(objfile, ".obj");
-	for (i = strlen(objfile) - 1; i > 0;
+	for (i = (int)strlen(objfile) - 1; i > 0;
 	     i--) /* extract path, if any for tmp file */
 		if (objfile[i] == '\\' || objfile[i] == ']' ||
 		    objfile[i] == ':') {
@@ -124,7 +126,7 @@ void open_files(int argc, char *argv[]) { /* open files and initialize things */
 			        *p++; /* get list file name from command line */
 	listfile[emitlst] = 0;        /* terminate lst file name */
 	appendef(listfile, ".lst");
-	for (i = strlen(listfile); i > 0;
+	for (i = (int)strlen(listfile); i > 0;
 	     i--) /* extract path, if any for tmp file */
 		if (listfile[i] == '\\' || listfile[i] == ']' ||
 		    listfile[i] == ':') {
@@ -262,9 +264,9 @@ void open_files(int argc, char *argv[]) { /* open files and initialize things */
 	insert_symbol(cur_sect, 0L, TRUE, TRUE,
 	              TRUE); /* enter section name in table */
 	ptr->section = TRUE; /* flag it as a section name */
-	time(&tyme);
-	strcpy(datetime, asctime(localtime(&tyme))); /* get time and date */
-	for (i = strlen(datetime) - 1; i && isspace(datetime[i]); i--)
+	time((time_t*) & tyme);
+	strcpy(datetime, asctime(localtime((time_t*) & tyme))); /* get time and date */
+	for (i = (int)strlen(datetime) - 1; i && isspace(datetime[i]); i--)
 		datetime[i] = 0;
 }
 
